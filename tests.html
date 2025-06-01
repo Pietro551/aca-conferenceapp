@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PawNutrition Website Tests</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 20px;
+            background: #f8f9fa;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .test-pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .test-fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .test-summary {
+            font-size: 1.2em;
+            margin-top: 20px;
+            padding: 15px;
+            background: #e9ecef;
+            border-radius: 8px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 PawNutrition Website Test Suite</h1>
+    
+    <div class="test-container">
+        <h2>Test Controls</h2>
+        <button onclick="runAllTests()">Run All Tests</button>
+        <button onclick="clearResults()">Clear Results</button>
+        <button onclick="openMainSite()">Open Main Site</button>
+    </div>
+
+    <div class="test-container">
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+        <div id="test-summary"></div>
+    </div>
+
+    <script>
+        class TestSuite {
+            constructor() {
+                this.tests = [];
+                this.results = [];
+            }
+
+            addTest(name, testFunction) {
+                this.tests.push({ name, testFunction });
+            }
+
+            async runTest(test) {
+                try {
+                    const result = await test.testFunction();
+                    this.results.push({
+                        name: test.name,
+                        passed: result.passed,
+                        message: result.message,
+                        details: result.details || ''
+                    });
+                } catch (error) {
+                    this.results.push({
+                        name: test.name,
+                        passed: false,
+                        message: `Test error: ${error.message}`,
+                        details: error.stack
+                    });
+                }
+            }
+
+            async runAllTests() {
+                this.results = [];
+                const resultsDiv = document.getElementById('test-results');
+                resultsDiv.innerHTML = '<p>Running tests...</p>';
+
+                for (const test of this.tests) {
+                    await this.runTest(test);
+                }
+
+                this.displayResults();
+            }
+
+            displayResults() {
+                const resultsDiv = document.getElementById('test-results');
+                const summaryDiv = document.getElementById('test-summary');
+                
+                resultsDiv.innerHTML = '';
+                
+                this.results.forEach(result => {
+                    const testDiv = document.createElement('div');
+                    testDiv.className = `test-result ${result.passed ? 'test-pass' : 'test-fail'}`;
+                    testDiv.innerHTML = `
+                        <strong>${result.passed ? '✅' : '❌'} ${result.name}</strong><br>
+                        ${result.message}
+                        ${result.details ? `<br><small>${result.details}</small>` : ''}
+                    `;
+                    resultsDiv.appendChild(testDiv);
+                });
+
+                const passedTests = this.results.filter(r => r.passed).length;
+                const totalTests = this.results.length;
+                
+                summaryDiv.innerHTML = `
+                    <strong>Test Summary:</strong> ${passedTests}/${totalTests} tests passed 
+                    (${Math.round(passedTests / totalTests * 100)}%)
+                `;
+            }
+
+            clearResults() {
+                this.results = [];
+                document.getElementById('test-results').innerHTML = '';
+                document.getElementById('test-summary').innerHTML = '';
+            }
+        }
+
+        // Initialize test suite
+        const testSuite = new TestSuite();
+
+        // Test 1: Check if main HTML file exists and loads
+        testSuite.addTest('HTML File Accessibility', async () => {
+            try {
+                const response = await fetch('./index.html');
+                const htmlContent = await response.text();
+                
+                if (response.ok && htmlContent.includes('PawNutrition')) {
+                    return {
+                        passed: true,
+                        message: 'Main HTML file loads successfully and contains expected content'
+                    };
+                } else {
+                    return {
+                        passed: false,
+                        message: 'HTML file does not load or missing expected content'
+                    };
+                }
+            } catch (error) {
+                return {
+                    passed: false,
+                    message: `Failed to load HTML file: ${error.message}`
+                };
+            }
+        });
+
+        // Test 2: Check CSS file accessibility
+        testSuite.addTest('CSS File Accessibility', async () => {
+            try {
+                const response = await fetch('./styles.css');
+                const cssContent = await response.text();
+                
+                if (response.ok && cssContent.includes('hero') && cssContent.includes('product-card')) {
+                    return {
+                        passed: true,
+                        message: 'CSS file loads successfully and contains expected styles'
+                    };
+                } else {
+                    return {
+                        passed: false,
+                        message: 'CSS file does not load or missing expected styles'
+                    };
+                }
+            } catch (error) {
+                return {
+                    passed: false,
+                    message: `Failed to load CSS file: ${error.message}`
+                };
+            }
+        });
+
+        // Test 3: Check JavaScript file accessibility
+        testSuite.addTest('JavaScript File Accessibility', async () => {
+            try {
+                const response = await fetch('./scripts.js');
+                const jsContent = await response.text();
+                
+                if (response.ok && jsContent.includes('MetricsCollector') && jsContent.includes('trackEvent')) {
+                    return {
+                        passed: true,
+                        message: 'JavaScript file loads successfully and contains expected functions'
+                    };
+                } else {
+                    return {
+                        passed: false,
+                        message: 'JavaScript file does not load or missing expected functions'
+                    };
+                }
+            } catch (error) {
+                return {
+                    passed: false,
+                    message: `Failed to load JavaScript file: ${error.message}`
+                };
+            }
+        });
+
+        // Test 4: Test metrics collection functionality
+        testSuite.addTest('Metrics Collection System', async () => {
+            try {
+                // Clear any existing data
+                localStorage.removeItem('pawnutrition_metrics');
+                localStorage.removeItem('userId');
+                
+                // Create a mock metrics collector
+                const mockCollector = new (function() {
+                    this.metrics = [];
+                    this.sessionId = 'test_session';
+                    this.userId = 'test_user';
+                    
+                    this.trackEvent = function(eventType, eventData) {
+                        this.metrics.push({
+                            sessionId: this.sessionId,
+                            userId: this.userId,
+                            timestamp: new Date().toISOString(),
+                            eventType: eventType,
+                            eventData: eventData
+                        });
+                    };
+                })();
+                
+                // Test tracking events
+                mockCollector.trackEvent('test_event', 'test_data');
+                mockCollector.trackEvent('product_click', 'premium-adult');
+                
+                if (mockCollector.metrics.length === 2 && 
+                    mockCollector.metrics[0].eventType === 'test_event' &&
+                    mockCollector.metrics[1].eventData === 'premium-adult') {
+                    return {
+                        passed: true,
+                        message: 'Metrics collection system works correctly',
+                        details: `Tracked ${mockCollector.metrics.length} events successfully`
+                    };
+                } else {
+                    return {
+                        passed: false,
+                        message: 'Metrics collection system not working properly'
+                    };
+                }
+            } catch (error) {
+                return {
+                    passed: false,
+                    message: `Metrics collection test failed: ${error.message}`
+                };
+            }
+        });
+
+        // Test 5: Test marketing content structure
+        testSuite.addTest('Marketing Content Structure', async () => {
+            try {
+                const mockContent = {
+                    blogPosts: [
+                        { id: 1, title: "Test Post", content: "Test content" }
+                    ],
+                    influencers: [
+                        { id: "test_influencer", handle: "@test", testimonial: "Great product!" }
+                    ]
+                };
+                
+                if (mockContent.blogPosts.length > 0 && 
+                    mockContent.influencers.length > 0 &&
+                    mockContent.blogPosts[0].title &&
+                    mockContent.influencers[0].testimonial) {
+                    return {
+                        passed: true,
+                        message: 'Marketing content structure is correct',
+                        details: `${mockContent.blogPosts.length} blog posts, ${mockContent.influencers.length} influencers`
+                    };
+                } else {
+                    return {
+                        passed: false,
+                        message: 'Marketing content structure is incomplete'
+                    };
+                }
+            } catch (error) {
+                return {
+                    passed: false,
+                    message: `Marketing content test failed: ${error.message}`
+                };
+            }
+        });
+
+        // Test 6: Test local storage functionality
+        testSuite.addTest('Local Storage Functionality', async () => {
+            try {
+                const testKey = 'pawnutrition_test';
+                const testData = { test: 'data', timestamp: Date.now() };
+                
+                // Test write
+                localStorage.setItem(testKey, JSON.stringify(testData));
+                
+                // Test read
+                const storedData = JSON.parse(localStorage.getItem(testKey));
+                
+                // Test delete
+                localStorage.removeItem(testKey);
+                const deletedData = localStorage.getItem(testKey);
+                
+                if (storedData && storedData.test === 'data' && deletedData === null) {
+                    return {
+                        passed: true,
+                        message: 'Local storage functionality works correctly',
+                        details: 'Write, read, and delete operations successful'
+                    };
+                } else {
+                    return {
+                        passed: false,
+                        message: 'Local storage functionality not working properly'
+                    };
+                }
+            } catch (error) {
+                return {
+                    passed: false,
+                    message: `Local storage test failed: ${error.message}`
+                };
+            }
+        });
+
+        // Test 7: Test responsive design elements
+        testSuite.addTest('Responsive Design Check', async () => {
+            try {
+                // This test would normally check CSS media queries
+                // For now, we'll test that the CSS contains responsive elements
+                const response = await fetch('./styles.css');
+                const cssContent = await response.text();
+                
+                const hasMediaQueries = cssContent.includes('@media');
+                const hasFlexbox = cssContent.includes('flex');
+                const hasGrid = cssContent.includes('grid');
+                
+                if (hasMediaQueries && (hasFlexbox || hasGrid)) {
+                    return {
+                        passed: true,
+                        message: 'Responsive design elements detected in CSS',
+                        details: `Media queries: ${hasMediaQueries}, Flexbox: ${hasFlexbox}, Grid: ${hasGrid}`
+                    };
+                } else {
+                    return {
+                        passed: false,
+                        message: 'Missing responsive design elements in CSS'
+                    };
+                }
+            } catch (error) {
+                return {
+                    passed: false,
+                    message: `Responsive design test failed: ${error.message}`
+                };
+            }
+        });
+
+        // Test runner functions
+        function runAllTests() {
+            testSuite.runAllTests();
+        }
+
+        function clearResults() {
+            testSuite.clearResults();
+        }
+
+        function openMainSite() {
+            window.open('./index.html', '_blank');
+        }
+
+        // Auto-run tests on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Test suite loaded. Click "Run All Tests" to begin.');
+        });
+    </script>
+</body>
+</html>

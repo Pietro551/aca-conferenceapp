@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Dog Food - Nutritious & Delicious</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>🐕 PawNutrition</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#blog">Blog</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h2>Premium Nutrition for Your Best Friend</h2>
+                <p>Discover our scientifically formulated dog food that keeps your furry companion healthy and happy.</p>
+                <button class="cta-button" onclick="trackEvent('hero_cta_click')">Shop Now</button>
+            </div>
+        </section>
+
+        <section id="products" class="products">
+            <h2>Our Products</h2>
+            <div class="product-grid">
+                <div class="product-card" data-product="premium-adult">
+                    <div class="product-image">🥩</div>
+                    <h3>Premium Adult Formula</h3>
+                    <p>High-protein blend with real meat for active adult dogs</p>
+                    <span class="price">$49.99</span>
+                    <button onclick="trackEvent('product_click', 'premium-adult')">Add to Cart</button>
+                </div>
+                <div class="product-card" data-product="puppy-growth">
+                    <div class="product-image">🐶</div>
+                    <h3>Puppy Growth Formula</h3>
+                    <p>Specially designed nutrition for growing puppies</p>
+                    <span class="price">$45.99</span>
+                    <button onclick="trackEvent('product_click', 'puppy-growth')">Add to Cart</button>
+                </div>
+                <div class="product-card" data-product="senior-care">
+                    <div class="product-image">🦴</div>
+                    <h3>Senior Care Formula</h3>
+                    <p>Joint support and easy digestion for senior dogs</p>
+                    <span class="price">$52.99</span>
+                    <button onclick="trackEvent('product_click', 'senior-care')">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="blog" class="blog">
+            <h2>Dog Care Blog</h2>
+            <div class="blog-posts">
+                <article class="blog-post">
+                    <h3>5 Signs Your Dog Needs Better Nutrition</h3>
+                    <p>Learn the key indicators that your furry friend might benefit from premium nutrition...</p>
+                    <a href="#" onclick="trackEvent('blog_click', 'nutrition-signs')">Read More</a>
+                </article>
+                <article class="blog-post">
+                    <h3>Transitioning to New Dog Food: A Step-by-Step Guide</h3>
+                    <p>Make the switch to our premium formula smooth and stress-free for your pet...</p>
+                    <a href="#" onclick="trackEvent('blog_click', 'transition-guide')">Read More</a>
+                </article>
+            </div>
+        </section>
+
+        <section class="social-integration">
+            <h2>Follow Our Community</h2>
+            <div class="influencer-profiles">
+                <div class="influencer-card" data-influencer="dogtrainer_sarah">
+                    <div class="influencer-avatar">👩‍🦰</div>
+                    <h4>@dogtrainer_sarah</h4>
+                    <p>"My training clients love PawNutrition - their dogs have more energy and focus!"</p>
+                    <button onclick="trackEvent('influencer_follow', 'dogtrainer_sarah')">Follow on Instagram</button>
+                </div>
+                <div class="influencer-card" data-influencer="happy_paws_mom">
+                    <div class="influencer-avatar">👩‍🦱</div>
+                    <h4>@happy_paws_mom</h4>
+                    <p>"Since switching to PawNutrition, my Golden Retriever's coat is shinier than ever!"</p>
+                    <button onclick="trackEvent('influencer_follow', 'happy_paws_mom')">Follow on Instagram</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact">
+        <div class="footer-content">
+            <h3>Contact Us</h3>
+            <p>Email: hello@pawnutrition.com | Phone: 1-800-PAW-FOOD</p>
+            <p>&copy; 2024 PawNutrition. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
