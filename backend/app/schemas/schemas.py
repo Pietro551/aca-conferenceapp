@@ -32,7 +32,7 @@ class User(UserBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Venue Schemas
@@ -76,7 +76,7 @@ class Venue(VenueBase):
     updated_at: Optional[datetime] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Booking Schemas
@@ -116,7 +116,7 @@ class Booking(BookingBase):
     venue: Optional[Venue] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Authentication Schemas
