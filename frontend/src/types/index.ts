@@ -35,6 +35,7 @@ export interface Booking {
   total_cost: number;
   status: 'pending' | 'confirmed' | 'cancelled';
   notes?: string;
+  private_video_conference: boolean;
   created_at: string;
   updated_at: string;
   venue?: Venue;
@@ -76,6 +77,7 @@ export interface BookingRequest {
   start_time: string;
   end_time: string;
   notes?: string;
+  private_video_conference?: boolean;
 }
 
 export interface VenueCreateRequest {

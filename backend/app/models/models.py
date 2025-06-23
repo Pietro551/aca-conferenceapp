@@ -58,6 +58,7 @@ class Booking(Base):
     status = Column(String, default="pending")  # pending, confirmed, cancelled
     purpose = Column(String)  # meeting, conference, workshop, etc.
     notes = Column(Text)
+    private_video_conference = Column(Boolean, default=False)  # private video conference option
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 

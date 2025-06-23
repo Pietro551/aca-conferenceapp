@@ -86,6 +86,7 @@ class BookingBase(BaseModel):
     end_datetime: datetime
     purpose: Optional[str] = None
     notes: Optional[str] = None
+    private_video_conference: Optional[bool] = False
 
 
 class BookingCreate(BookingBase):
@@ -98,6 +99,7 @@ class BookingUpdate(BaseModel):
     purpose: Optional[str] = None
     notes: Optional[str] = None
     status: Optional[str] = None
+    private_video_conference: Optional[bool] = None
 
 
 class Booking(BookingBase):
@@ -105,6 +107,7 @@ class Booking(BookingBase):
     user_id: int
     total_cost: Decimal
     status: str
+    private_video_conference: bool
     created_at: datetime
     updated_at: Optional[datetime] = None
     

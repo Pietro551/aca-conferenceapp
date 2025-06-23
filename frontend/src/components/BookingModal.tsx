@@ -24,7 +24,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ venue, onClose, onSuccess }
     watch,
     formState: { errors },
     setError,
-  } = useForm<BookingRequest & { date: string; startTime: string; endTime: string }>();
+  } = useForm<BookingRequest & { date: string; startTime: string; endTime: string; private_video_conference?: boolean }>();
 
   const watchedValues = watch(['date', 'startTime', 'endTime']);
 
@@ -85,6 +85,7 @@ const BookingModal: React.FC<BookingModalProps> = ({ venue, onClose, onSuccess }
       start_time: startDateTime,
       end_time: endDateTime,
       notes: data.notes,
+      private_video_conference: data.private_video_conference || false,
     };
 
     createBookingMutation.mutate(bookingData);
@@ -214,6 +215,26 @@ const BookingModal: React.FC<BookingModalProps> = ({ venue, onClose, onSuccess }
                 placeholder="Any special requirements or notes..."
               />
             </div>
+
+            {/* Private Video Conference Option - only show if venue has video conferencing */}
+            {venue.amenities && venue.amenities.some(amenity => 
+              amenity.toLowerCase().includes('video conferencing')
+            ) && (
+              <div className="flex items-center">
+                <input
+                  {...register('private_video_conference')}
+                  type="checkbox"
+                  id="private_video_conference"
+                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                />
+                <label htmlFor="private_video_conference" className="ml-2 block text-sm text-gray-900">
+                  Request private video conference session
+                  <span className="block text-xs text-gray-500">
+                    Ensure confidentiality and privacy for your video conference
+                  </span>
+                </label>
+              </div>
+            )}
 
             {estimatedCost > 0 && (
               <div className="bg-blue-50 p-4 rounded-lg">
